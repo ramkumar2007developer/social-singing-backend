@@ -1,0 +1,51 @@
+ANDROID LOCAL TESTING
+
+Explain how to test the existing FastAPI backend from a physical Android phone.
+
+STEP 1:
+Connect laptop and Android phone to the same Wi-Fi/local network.
+
+STEP 2:
+Find laptop IPv4 address:
+
+ipconfig
+
+Example:
+
+IPv4 Address: 192.168.43.13
+
+IMPORTANT: Use your own current IPv4 address shown in your terminal. Do not permanently assume 192.168.43.13.
+
+STEP 3:
+Start backend using:
+
+.\venv\Scripts\Activate.ps1
+
+$env:PYTHONPATH="."
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+STEP 4:
+On Android Chrome open:
+
+http://YOUR_LAPTOP_IP:8000/docs
+
+Example:
+
+http://192.168.43.13:8000/docs
+
+STEP 5:
+Health test:
+
+http://YOUR_LAPTOP_IP:8000/health
+
+STEP 6:
+Note that localhost/127.0.0.1 on the Android phone refers to the phone itself, so the laptop IP must be used.
+
+STEP 7:
+Troubleshooting:
+- Check both devices are on the same network
+- Check FastAPI is running with --host 0.0.0.0
+- Check Windows Firewall
+- Check correct IPv4 address
+- Check port 8000
+- Do not modify backend code just because the phone cannot connect

@@ -1,0 +1,132 @@
+API TEST CHECKLIST
+
+RECOMMENDED TESTING FLOW
+
+1. Create User 1
+2. Create User 2
+3. Login User 1
+4. Authorize Swagger using JWT
+5. Get User 1 profile
+6. Send friend request
+7. Login User 2
+8. Authorize as User 2
+9. View friend requests
+10. Accept request
+11. View friends
+12. Create one-to-one conversation
+13. Get conversation
+14. List conversations
+15. Send text message
+16. Get messages
+17. Test pagination
+18. Test unauthorized access
+19. Test invalid/nonexistent resources
+20. Test logout/token expiration if supported by the existing implementation
+
+API GROUPS
+
+AUTHENTICATION
+
+POST /api/v1/auth/signup
+- Purpose: Create a new user account.
+- What to test: Valid signup, duplicate email rejection.
+- Authentication required or not: No
+- Expected successful result: 200 OK (Returns user object without password).
+- Important edge cases: Duplicate email should return 400.
+- Note: Use the exact request schema displayed by Swagger for the body.
+
+POST /api/v1/auth/login
+- Purpose: Exchange credentials for a JWT access token.
+- What to test: Valid login.
+- Authentication required or not: No
+- Expected successful result: 200 OK (Returns access_token and token_type).
+- Important edge cases: Incorrect email or password should return 400.
+
+USERS
+
+GET /api/v1/users/me
+- Purpose: View the current authenticated user's profile.
+- What to test: Authorized request vs unauthorized request.
+- Authentication required or not: Yes
+- Expected successful result: 200 OK.
+- Important edge cases: Unauthenticated requests should return 401.
+
+FRIENDS
+
+POST /api/v1/friends/requests
+- Purpose: Send a friend request to another user.
+- What to test: Sending request to valid user, sending to self, duplicate requests.
+- Authentication required or not: Yes
+- Expected successful result: 200 OK.
+- Important edge cases: Cannot send request to self (400), cannot send duplicate request (400).
+- Note: Use the exact request schema displayed by Swagger for the body.
+
+GET /api/v1/friends/requests
+- Purpose: View your pending incoming friend requests.
+- What to test: Correctly lists requests sent to you.
+- Authentication required or not: Yes
+- Expected successful result: 200 OK (Returns array of pending requests).
+
+POST /api/v1/friends/requests/{id}/accept
+- Purpose: Accept a pending friend request.
+- What to test: Accepting valid request, accepting request meant for someone else.
+- Authentication required or not: Yes
+- Expected successful result: 200 OK.
+- Important edge cases: Cannot accept request not addressed to you (403 Forbidden).
+
+POST /api/v1/friends/requests/{id}/reject
+- Purpose: Reject a pending friend request.
+- What to test: Rejecting valid request.
+- Authentication required or not: Yes
+- Expected successful result: 200 OK.
+
+GET /api/v1/friends
+- Purpose: View your accepted friends list.
+- What to test: Returns array of friends.
+- Authentication required or not: Yes
+- Expected successful result: 200 OK.
+
+DELETE /api/v1/friends/{user_id}
+- Purpose: Remove an existing friend.
+- What to test: Deleting friend successfully removes relationship.
+- Authentication required or not: Yes
+- Expected successful result: 200 OK.
+
+CONVERSATIONS
+
+POST /api/v1/conversations
+- Purpose: Create or retrieve a 1-on-1 private chat room with a friend.
+- What to test: Creating chat with valid friend, self-chat, idempotent behavior.
+- Authentication required or not: Yes
+- Expected successful result: 200 OK.
+- Important edge cases: Cannot create chat with yourself (400). Second attempt returns exact same ID.
+- Note: Use the exact request schema displayed by Swagger for the body.
+
+GET /api/v1/conversations
+- Purpose: List all active conversations for the authenticated user.
+- What to test: Retrieves array of your conversations, excludes conversations of other users.
+- Authentication required or not: Yes
+- Expected successful result: 200 OK.
+
+GET /api/v1/conversations/{id}
+- Purpose: Get details for a specific conversation.
+- What to test: Accessing valid chat, accessing chat you aren't a participant in, nonexistent chat.
+- Authentication required or not: Yes
+- Expected successful result: 200 OK.
+- Important edge cases: Non-participant gets 403 Forbidden. Nonexistent chat gets 404.
+
+TEXT CHAT
+
+POST /api/v1/conversations/{conversation_id}/messages
+- Purpose: Send a text message in a conversation.
+- What to test: Normal string, emoji string.
+- Authentication required or not: Yes
+- Expected successful result: 200 OK.
+- Important edge cases: Empty string (422), whitespace string (422), over 4000 characters (422).
+- Note: Use the exact request schema displayed by Swagger for the body.
+
+GET /api/v1/conversations/{conversation_id}/messages
+- Purpose: Retrieve paginated messages for a conversation.
+- What to test: Retrieve messages, test 'skip' and 'limit' parameters, verify chronological ordering.
+- Authentication required or not: Yes
+- Expected successful result: 200 OK (Returns array of messages).

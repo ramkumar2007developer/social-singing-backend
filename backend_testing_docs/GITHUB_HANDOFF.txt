@@ -1,0 +1,51 @@
+GITHUB HANDOFF
+
+Explain how to prepare the completed backend for GitHub handoff.
+
+1. Activate environment:
+
+.\venv\Scripts\Activate.ps1
+
+2. Run final tests:
+
+$env:PYTHONPATH="."
+pytest tests/ -v
+
+Expected:
+
+39 passed
+
+3. Check Git status:
+
+git status
+
+4. Confirm these are NOT committed:
+
+venv/
+.env
+__pycache__/
+*.pyc
+
+5. Add files:
+
+git add .
+
+6. Commit:
+
+git commit -m "Complete social singing backend"
+
+7. Push:
+
+git push origin main
+
+8. Recommended repository name:
+
+social-singing-backend
+
+9. Teammates can clone the repository and integrate:
+- Android/frontend application
+- Singing/audio functionality
+- Final integration
+- Final deployment
+
+10. The existing backend should not be unnecessarily rewritten during integration.

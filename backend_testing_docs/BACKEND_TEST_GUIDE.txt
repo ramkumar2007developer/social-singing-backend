@@ -1,0 +1,63 @@
+BACKEND TEST GUIDE
+
+1. Project overview
+This project is the foundational backend for a Social Singing application. It provides complete user management, friendship workflows, one-to-one conversations, and text chatting capabilities. It is fully prepared for future audio/singing integration.
+
+2. Backend technology
+- FastAPI
+- PostgreSQL
+- SQLAlchemy
+- Pydantic
+- Alembic
+- Pytest
+- JWT authentication
+
+3. Existing architecture:
+
+Router
+   ↓
+Service
+   ↓
+Repository
+   ↓
+Database
+
+4. Environment setup commands:
+
+python -m venv venv
+
+PowerShell activation:
+
+.\venv\Scripts\Activate.ps1
+
+Install dependencies:
+
+pip install -r requirements.txt
+
+5. Run backend locally:
+
+$env:PYTHONPATH="."
+uvicorn app.main:app --reload
+
+6. Swagger URL:
+
+http://127.0.0.1:8000/docs
+
+7. ReDoc URL:
+
+http://127.0.0.1:8000/redoc
+
+8. Health check:
+
+http://127.0.0.1:8000/health
+
+9. Final automated test command:
+
+$env:PYTHONPATH="."
+pytest tests/ -v
+
+Expected result:
+
+39 passed
+
+10. Explain that the backend can also be tested from an Android phone on the same local network. See ANDROID_LOCAL_TESTING.txt.
